@@ -12,10 +12,10 @@ burgerRouter.route('/')
 
 burgerRouter.route('/:id')
 
-.get ( idValidator(), burgerController.getByID)
+.get (idValidator(), burgerController.getByID)
 
-.put ( idValidator(), burgerController.update)
+.put (idValidator(), burgerController.update)
 
-.delete( idValidator(), burgerController.delete)
+.delete(idValidator(), burgerController.delete)
 
 module.exports = burgerRouter;
