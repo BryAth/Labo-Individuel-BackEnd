@@ -1,22 +1,24 @@
 const commandRouter = require ('express').Router();
 const idValidator = require ('../middleware/idValidators')
 const commandController = require("../controllers/command-controller")
+const authentification = require ('../middleware/auth-jwt-middleware')
+
 
 
 commandRouter.route('/')
 
-.get(commandController.getAll)
+.get( authentification(["Moderator","Admin"]), commandController.getAll)
 
-.post(commandController.create)
+.post( authentification(), commandController.create)
 
 commandRouter.route('/:id')
 
-.get ( idValidator(), commandController.getByID)
+.get ( authentification(["Moderator","Admin"]) ,  idValidator(), commandController.getByID)
 
-.put ( idValidator(), commandController.update)
+.put (  authentification(["Moderator","Admin"]) , idValidator(), commandController.update)
 
-.delete( idValidator(), commandController.delete)
+.delete( authentification(["Admin"]) ,  idValidator(), commandController.delete)
 
 
-//! category-router
+
 module.exports = commandRouter;

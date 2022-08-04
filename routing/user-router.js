@@ -6,20 +6,21 @@ const idValidator = require ('../middleware/idValidators')
 const userValidator = require('../validators/user-validator')
 const bodyValidation = require ('../middleware/bodyValidators')
 const userController = require('../controllers/users-controller');
+const authentification = require ('../middleware/auth-jwt-middleware')
 
 userRouter.route('/')
 
 
-.get(userController.getAll)
+.get( authentification(["Moderator","Admin"]),userController.getAll)
 
-.post(userController.create)
+// .post(authentification(["Moderator","Admin"]),userController.create)
 
 userRouter.route('/:id')
 
-.get (idValidator(), userController.getByID)
+.get (authentification(["Admin"]),idValidator(), userController.getByID)
 
-.put (idValidator(),bodyValidation(userValidator), userController.update)
+.put (authentification(["Admin"]),idValidator(),bodyValidation(userValidator), userController.update)
 
-.delete(idValidator(), userController.delete)
+.delete(authentification(["Admin"]),idValidator(), userController.delete)
 
 module.exports = userRouter;

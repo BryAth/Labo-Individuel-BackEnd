@@ -2,6 +2,11 @@ const Users = require ("../models/users.model")
 
 const userController = {
     getAll : async(req,res) => {
+
+
+        
+        
+
         const user = await Users.find()
         res.status(200).json(user)
         console.log("Affichage de tout les users.")
@@ -14,6 +19,9 @@ const userController = {
         if(userId){
             res.status(200).json(userId)
             console.log("Affichage avec l'user auquel l'ID :" + id +" appartient.")
+        } 
+        else {
+            res.sendStatus(404)
         }
     },
     create : async (req,res) => {
@@ -29,13 +37,14 @@ const userController = {
             email,
             ClientAdress
         } ,{returnDocument : 'after'});
-        if(!userToUpdate)
+        if(userToUpdate)
         {
-        res.status(404).json(userToUpdate);
-        console.log("User Updated.")
+            return res.sendStatus(200)
         }
         else{
-            return res.sendStatus(200)
+            res.status(404).json(userToUpdate); 
+            
+            console.log("User Updated.")
         }
 
     },

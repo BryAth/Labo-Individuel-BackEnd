@@ -1,8 +1,24 @@
 const command = require ("../models/command-model")
 
+
 const commandController = {
     getAll : async(req,res) => {
+
+
+    
+
         const commands = await command.find()
+        .populate({
+            path : 'receiverId',
+            select : {ClientAdress : 1 , name : 1}
+        })
+        .populate({
+            path : 'burgers.burgerId',
+            select : {name : 1 }
+        })
+        
+
+
         res.status(200).json(commands)
     },
 
@@ -10,34 +26,44 @@ const commandController = {
         const id = req.params.id;
 
         const commandId = await command.findById(id)
-        if(Burger){
-            res.status(200).json(commandId)
+        .populate({
+            path : 'receiverId',
+            select : {ClientAdress : 1 , name : 1}
+        })
+        .populate({
+            path : 'burgers.burgerId',
+            select : {name : 1 }
+        })
+        if(!commandId){
+            res.sendStatus(404)
+        }
+        else{
+            res.status(202).json(commandId)
         }
     },
     create : async (req,res) => {
         const commandToAdd = command(req.body);
-        console.log(commandToAdd);
+        
         await commandToAdd.save()
         res.status(200).json(commandToAdd)
     },
     update : async (req,res) => {
         const id = req.params.id;
-        const {status,receiverId,ClientName,BurgerName,ClientAdress} = req.body
+        const {status,receiverId,ClientName,name,ClientAdress} = req.body
         const commandToUpdtate = await command.findByIdAndUpdate(id,{
             status, 
-            receiverId, 
-            ClientName, 
-            BurgerName, 
-            ClientAdress 
+                    
+            name, 
+        
 
         } ,{returnDocument : 'after'});
-        if(!commandToUpdtate)
+        if(commandToUpdtate)
         {
-        res.status(404).json(commandToUpdtate);
-        console.log("Commande updated");
+            return res.sendStatus(200)
         }
         else{
-            return res.sendStatus(200)
+            res.status(404).json(commandToUpdtate); //! switch 200><404
+            console.log("Commande updated");
         }
 
     },

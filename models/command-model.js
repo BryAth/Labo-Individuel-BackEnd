@@ -1,7 +1,8 @@
-const { Timestamp } = require('bson');
+
 const { Schema , model,Types} = require ('mongoose');
 const Burger = require('./burger-models')
 const User = require('./users.model')
+
 
 const commandSchema = new Schema ({
     status :  {
@@ -15,24 +16,20 @@ const commandSchema = new Schema ({
         ref : User,
         required : true
     },
-    ClientName : {
-        type : String,
-        ref: User,
-        required: true,
-    },
-    BurgerName : {
-        type : Types.ObjectId,
-        ref : User,
-        required : true,
-        },
-    ClientAdress : {
-        type : String,
-        ref : User,
-        required : true
-    }
-    ,
-      
-    
+    burgers : [
+        {
+            burgerId:{
+                type : Types.ObjectId,
+                ref: Burger,
+                required : true} ,
+            ingredients : [{
+                type : String,
+                trim : true,
+                enum : ["Poisson","Salade","Tomates"]
+
+            }]}
+    ] 
+
 },{
     collection : 'Commands',
     timestamps: true

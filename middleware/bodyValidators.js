@@ -17,14 +17,15 @@ const bodyValidation =  (yupValidator)  => {
                     abortEarly : false
                 })
                 //On remplace req.body qui contient potentiellement des données en plus que ce que l'on souhaite
-                //par validata,qui a été nettory des données qu'on ne souhaite pas insérer
+                //par validata,qui a été nettoyer des données qu'on ne souhaite pas insérer
                 req.body = valiData;
                 //On continue la requête
                 next();
         }
         //Si on a une erreur : on reverra bad request
         catch(e) {
-            res.sendStatus(400); // Bad request
+            res.sendStatus(400);
+            console.log(e); // Bad request
         }
 
     }

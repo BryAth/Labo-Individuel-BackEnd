@@ -1,7 +1,4 @@
-const { Timestamp } = require('bson');
 const { Schema , model} = require ('mongoose');
-const burger = require ('./burger-models')
-const command = require ('./command-model')
 
 const userSchema = new Schema ({
     name :  {
@@ -15,14 +12,35 @@ const userSchema = new Schema ({
         trim : true,
         required : true,
     },
+    pseudo : {
+        type : String,
+        trim : true,
+        unique : true,
+        required : true,
+    },
+    password : {
+        type : String,
+        trim : true,
+        required: true,
+    },
     ClientAdress : {
         type : String,
         trim: true,
         required: true,
     },
-    
+    allergenes : {
+        type : Boolean,
+        required : true,
+    },
+    roles : {
+        type : String,
+        enum : ['User','Moderator','Admin'],
+        required : true,
+        default : 'User'
+    }
 
-    
+
+
 },{
     collection : 'Users',
         timestamps: true
